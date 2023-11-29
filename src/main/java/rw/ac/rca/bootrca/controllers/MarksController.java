@@ -1,5 +1,6 @@
 package rw.ac.rca.bootrca.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rw.ac.rca.bootrca.DTO.MarksDTO;
@@ -58,7 +59,7 @@ public class MarksController {
 //================================================Entering, Updating, and Deleting Marks For By Instructors================================================================
 
     @PostMapping("/add")
-    public ResponseEntity<CustomResponse<Marks>> addMarksByStudentAndCourse(@RequestBody MarksDTO marksDTO){
+    public ResponseEntity<CustomResponse<Marks>> addMarksByStudentAndCourse(@RequestBody @Valid MarksDTO marksDTO){
         Optional<Student> optionalStudent = Optional.ofNullable(studentRepository.searchStudentByStudentCode(marksDTO.getStudentCode()));
         Optional<Course> optionalCourse = Optional.ofNullable(courseRepository.searchCourseByCourseCode(marksDTO.getCourseCode()));
 
@@ -75,7 +76,7 @@ public class MarksController {
     }
 
     @PutMapping("/update/{marks_id}")
-    public ResponseEntity<CustomResponse<Marks>> update(@PathVariable("marks_id") Long marks_id, @RequestBody MarksDTO marksDTO){
+    public ResponseEntity<CustomResponse<Marks>> update(@PathVariable("marks_id") Long marks_id, @RequestBody @Valid MarksDTO marksDTO){
        Optional<Marks> optionalMarks = marksRepository.findById(marks_id);
         if (optionalMarks.isPresent()){
             Marks newMarks = optionalMarks.get();

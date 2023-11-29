@@ -26,5 +26,5 @@ public class StudentDTO extends PersonDTO{
 
     @NotEmpty
     @NotNull
-    String courseCode;
+    String studentStatus;
 }

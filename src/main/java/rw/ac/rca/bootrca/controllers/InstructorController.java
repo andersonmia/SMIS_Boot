@@ -1,5 +1,6 @@
 package rw.ac.rca.bootrca.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rw.ac.rca.bootrca.DTO.InstructorDTO;
@@ -42,7 +43,7 @@ public class InstructorController extends BaseController{
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CustomResponse<Instructor>> add(@RequestBody InstructorDTO instructorDTO) throws ParseException {
+    public ResponseEntity<CustomResponse<Instructor>> add(@RequestBody @Valid InstructorDTO instructorDTO) throws ParseException {
 
         List<PhoneNumber> validPhoneNumbers = processPhoneNumbers(instructorDTO.getPhoneNumbers());
         Date dateOfBirth = processStringDate(instructorDTO.getDateOfBirth());
@@ -56,27 +57,23 @@ public class InstructorController extends BaseController{
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CustomResponse<Instructor>> update(@PathVariable("id") Long id, @RequestBody InstructorDTO instructorDTO){
+    public ResponseEntity<CustomResponse<Instructor>> update(@PathVariable("id") Long id, @RequestBody @Valid InstructorDTO instructorDTO){
 
         Optional<Instructor> optionalInstructor = instructorRepository.findById(id);
         Optional<Address> optionalAddress = Optional.ofNullable(addressRepository.searchAddressByVillage(instructorDTO.getVillageName()));
         List<PhoneNumber> validPhoneNumbers = processPhoneNumbers(instructorDTO.getPhoneNumbers());
 
         if (optionalInstructor.isPresent()){
-            Instructor newInstructor = optionalInstructor.get();
+            Instructor existingInstructor = optionalInstructor.get();
 
-            if (instructorDTO.getEmail() != null)
-                newInstructor.setEmail(instructorDTO.getEmail());
-            newInstructor.setPhoneNumbers(validPhoneNumbers);
-            optionalAddress.ifPresent(newInstructor::setAddress);
-            if (instructorDTO.getPhoneNumbers() != null)
-                newInstructor.setGender(instructorDTO.getGender());
-            if (instructorDTO.getFirstName() != null)
-                newInstructor.setFirstName(instructorDTO.getFirstName());
-            if (instructorDTO.getLastName() != null)
-                newInstructor.setLastName(instructorDTO.getLastName());
+            existingInstructor.setEmail(instructorDTO.getEmail());
+            existingInstructor.setPhoneNumbers(validPhoneNumbers);
+            optionalAddress.ifPresent(existingInstructor::setAddress);
+            existingInstructor.setGender(instructorDTO.getGender());
+            existingInstructor.setFirstName(instructorDTO.getFirstName());
+            existingInstructor.setLastName(instructorDTO.getLastName());
 
-            return ResponseEntity.ok(new CustomResponse<>(ok, instructorRepository.save(newInstructor)));
+            return ResponseEntity.ok(new CustomResponse<>(ok, instructorRepository.save(existingInstructor)));
         }else {
             return ResponseEntity.ok(new CustomResponse<>(fail));
         }

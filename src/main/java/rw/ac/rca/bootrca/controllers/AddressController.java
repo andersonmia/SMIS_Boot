@@ -1,5 +1,6 @@
 package rw.ac.rca.bootrca.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rw.ac.rca.bootrca.models.Address;
@@ -28,22 +29,22 @@ public class AddressController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CustomResponse<Address>> add(@RequestBody Address address){
+    public ResponseEntity<CustomResponse<Address>> add(@RequestBody @Valid Address address){
         return ResponseEntity.ok(new CustomResponse<>(ok, addressRepository.save(address)));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CustomResponse<Address>> update(@PathVariable("id") Long id, @RequestBody Address address){
+    public ResponseEntity<CustomResponse<Address>> update(@PathVariable("id") Long id, @RequestBody @Valid Address address){
         Optional<Address> optionalAddress = addressRepository.findById(id);
         if (optionalAddress.isPresent()){
-            Address newAddress = optionalAddress.get();
-            newAddress.setDistrict(address.getDistrict());
-            newAddress.setProvince(address.getProvince());
-            newAddress.setCell(address.getCell());
-            newAddress.setSector(address.getSector());
-            newAddress.setVillage(address.getVillage());
+            Address existingAddress = optionalAddress.get();
+            existingAddress.setDistrict(address.getDistrict());
+            existingAddress.setProvince(address.getProvince());
+            existingAddress.setCell(address.getCell());
+            existingAddress.setSector(address.getSector());
+            existingAddress.setVillage(address.getVillage());
 
-            return ResponseEntity.ok(new CustomResponse<>(ok, addressRepository.save(newAddress)));
+            return ResponseEntity.ok(new CustomResponse<>(ok, addressRepository.save(existingAddress)));
         }else {
             return ResponseEntity.ok(new CustomResponse<>(fail));
         }

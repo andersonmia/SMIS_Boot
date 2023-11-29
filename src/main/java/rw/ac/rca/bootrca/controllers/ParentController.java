@@ -1,5 +1,6 @@
 package rw.ac.rca.bootrca.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rw.ac.rca.bootrca.DTO.ParentDTO;
@@ -52,7 +53,7 @@ public class ParentController extends BaseController {
     }
 
     @PostMapping("/update/{parent_id}")
-    public ResponseEntity<CustomResponse<Parent>> update(@PathVariable("parent_id") Long parent_id, @RequestBody ParentDTO parentDTO) throws ParseException {
+    public ResponseEntity<CustomResponse<Parent>> update(@PathVariable("parent_id") Long parent_id, @RequestBody @Valid ParentDTO parentDTO) throws ParseException {
 
         Optional<Parent> optionalParent = parentRepository.findById(parent_id);
         if (optionalParent.isEmpty()) {
@@ -64,27 +65,16 @@ public class ParentController extends BaseController {
         Optional<Address> optionalAddress = Optional.ofNullable(addressRepository.searchAddressByVillage(parentDTO.getVillageName()));
         optionalAddress.ifPresent(existingParent::setAddress);
 
-        if (parentDTO.getFirstName() != null)
-            existingParent.setFirstName(parentDTO.getFirstName());
+        existingParent.setFirstName(parentDTO.getFirstName());
+        existingParent.setLastName(parentDTO.getLastName());
+        existingParent.setGender(parentDTO.getGender());
+        existingParent.setEmail(parentDTO.getEmail());
 
-        if (parentDTO.getLastName() != null)
-            existingParent.setLastName(parentDTO.getLastName());
+        List<PhoneNumber> validPhoneNumbers = processPhoneNumbers(parentDTO.getPhoneNumbers());
+        existingParent.setPhoneNumbers(validPhoneNumbers);
 
-        if (parentDTO.getGender() != null)
-            existingParent.setGender(parentDTO.getGender());
-
-        if (parentDTO.getEmail() != null)
-            existingParent.setEmail(parentDTO.getEmail());
-
-        if (parentDTO.getPhoneNumbers() != null){
-            List<PhoneNumber> validPhoneNumbers = processPhoneNumbers(parentDTO.getPhoneNumbers());
-            existingParent.setPhoneNumbers(validPhoneNumbers);
-        }
-
-        if (parentDTO.getDateOfBirth() != null){
-            Date dateOfBirth = processStringDate(parentDTO.getDateOfBirth());
-            existingParent.setDateOfBirth(dateOfBirth);
-        }
+        Date dateOfBirth = processStringDate(parentDTO.getDateOfBirth());
+        existingParent.setDateOfBirth(dateOfBirth);
 
         Parent updatedParent = parentRepository.save(existingParent);
 

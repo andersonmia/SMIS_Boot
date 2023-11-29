@@ -1,5 +1,6 @@
 package rw.ac.rca.bootrca.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rw.ac.rca.bootrca.DTO.CourseDTO;
@@ -36,10 +37,10 @@ public class CourseController extends BaseController{
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CustomResponse<Course>> add(@RequestBody CourseDTO courseDTO){
+    public ResponseEntity<CustomResponse<Course>> add(@RequestBody @Valid CourseDTO courseDTO){
 
         Optional<Instructor> optionalInstructor = Optional.ofNullable(instructorRepository.searchInstructorByFirstNameAndLastName(courseDTO.getInstructorFirstName(), courseDTO.getInstructorLastName()));
-        CourseDuration newDuration = processStringDuration(courseDTO.getCourseDuration());
+        CourseDuration newDuration = processCourseDuration(courseDTO.getCourseDuration());
 
         if (optionalInstructor.isEmpty())
             return ResponseEntity.ok(new CustomResponse<>(fail));
@@ -51,7 +52,7 @@ public class CourseController extends BaseController{
     }
 
     @PutMapping("/update/{courseCode}")
-    public ResponseEntity<CustomResponse<Course>> updateByCourseCode(@PathVariable("courseCode") String courseCode, @RequestBody CourseDTO courseDTO){
+    public ResponseEntity<CustomResponse<Course>> updateByCourseCode(@PathVariable("courseCode") String courseCode, @RequestBody @Valid CourseDTO courseDTO){
         Optional<Course> optionalCourse = Optional.ofNullable(courseRepository.searchCourseByCourseCode(courseCode));
         Optional<Instructor> optionalInstructor = Optional.ofNullable(instructorRepository.searchInstructorByFirstNameAndLastName(courseDTO.getInstructorFirstName(), courseDTO.getInstructorLastName()));
 
@@ -60,21 +61,16 @@ public class CourseController extends BaseController{
 
         Course existingCourse = optionalCourse.get();
 
-        if (courseDTO.getCourseDuration() != null){
-            CourseDuration newDuration = processStringDuration(courseDTO.getCourseDuration());
-            existingCourse.setCourseDuration(newDuration);
-        }
-        if (courseDTO.getCourseName() != null)
-            existingCourse.setCourseName(courseDTO.getCourseName());
+        CourseDuration newDuration = processCourseDuration(courseDTO.getCourseDuration());
+        existingCourse.setCourseDuration(newDuration);
+        existingCourse.setCourseName(courseDTO.getCourseName());
 
         if (optionalInstructor.isPresent()){
             Instructor existingInstructor = optionalInstructor.get();
             existingCourse.setInstructor(existingInstructor);
         }
-        if (courseDTO.getCourseCode() != null)
-            existingCourse.setCourseCode(courseDTO.getCourseCode());
-        if (courseDTO.getTotalMarks() != null)
-            existingCourse.setTotalMarks(courseDTO.getTotalMarks());
+        existingCourse.setCourseCode(courseDTO.getCourseCode());
+        existingCourse.setTotalMarks(courseDTO.getTotalMarks());
 
         return ResponseEntity.ok(new CustomResponse<>(ok, courseRepository.save(existingCourse)));
 

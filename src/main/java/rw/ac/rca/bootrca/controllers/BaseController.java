@@ -1,11 +1,11 @@
 package rw.ac.rca.bootrca.controllers;
 
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import rw.ac.rca.bootrca.models.PhoneNumber;
 import rw.ac.rca.bootrca.models.Student;
 import rw.ac.rca.bootrca.repositories.StudentRepository;
 import rw.ac.rca.bootrca.utils.CourseDuration;
+import rw.ac.rca.bootrca.utils.StudentStatus;
+import rw.ac.rca.bootrca.utils.UserRole;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,7 +45,15 @@ public abstract class BaseController {
         return simpleDateFormat.parse(stringDate);
     }
 
-    protected CourseDuration processStringDuration(String stringDuration){
+    protected CourseDuration processCourseDuration(String stringDuration){
         return CourseDuration.valueOf(stringDuration.toUpperCase());
+    }
+
+    protected StudentStatus processStudentStatus(String studentStatus){
+        return StudentStatus.valueOf(studentStatus.toUpperCase());
+    }
+
+    protected UserRole processUserRole(String userRoleString){
+        return UserRole.valueOf(userRoleString.toUpperCase());
     }
 }
