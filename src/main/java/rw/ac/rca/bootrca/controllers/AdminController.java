@@ -12,7 +12,7 @@ import rw.ac.rca.bootrca.utils.CustomResponse;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin/")
+@RequestMapping("/api/admin")
 public class AdminController {
 
     String fail = "Entity Deletion Failed";
@@ -34,7 +34,7 @@ public class AdminController {
         this.userRepository = userRepository;
     }
 
-    @DeleteMapping("/delete/{courseCode}")
+    @DeleteMapping("/delete/course/{courseCode}")
     public ResponseEntity<CustomResponse<Course>> deleteCourseByCourseCode(@PathVariable("courseCode") String courseCode){
         Optional<Course> optionalCourse = Optional.ofNullable(courseRepository.searchCourseByCourseCode(courseCode));
         if (optionalCourse.isEmpty())
@@ -43,7 +43,7 @@ public class AdminController {
         return ResponseEntity.ok(new CustomResponse<>(ok));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/instructor/{id}")
     public ResponseEntity<CustomResponse<Instructor>> deleteInstructorById(@PathVariable("id") Long id){
         Optional<Instructor> optionalInstructor = instructorRepository.findById(id);
         if (optionalInstructor.isPresent()){
@@ -55,7 +55,7 @@ public class AdminController {
 
     }
 
-    @DeleteMapping("/delete/{marks_id}")
+    @DeleteMapping("/delete/marks/{marks_id}")
     public ResponseEntity<CustomResponse<Marks>> deleteMarksById(@PathVariable("marks_id") Long marks_id){
         Optional<Marks> optionalMarks = marksRepository.findById(marks_id);
         if (optionalMarks.isPresent()){
@@ -66,7 +66,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/parent/{id}")
     public ResponseEntity<CustomResponse<Parent>> deleteParentById(@PathVariable("id") Long id){
         Optional<Parent> optionalParent = parentRepository.findById(id);
         if (optionalParent.isPresent()){
@@ -77,7 +77,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/student/{id}")
     public ResponseEntity<CustomResponse<Student>> deleteStudentById(@PathVariable("id") Long id){
         Optional<Student> studentOptional = studentRepository.findById(id);
         if (studentOptional.isPresent()){
@@ -88,7 +88,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/user/{id}")
     public ResponseEntity<CustomResponse<User>> deleteUserById(@PathVariable("id") Long id){
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()){
