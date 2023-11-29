@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import rw.ac.rca.bootrca.DTO.ParentDTO;
 import rw.ac.rca.bootrca.models.Address;
 import rw.ac.rca.bootrca.models.Parent;
-import rw.ac.rca.bootrca.models.PhoneNumber;
-import rw.ac.rca.bootrca.models.Student;
+import rw.ac.rca.bootrca.utils.PhoneNumber;
 import rw.ac.rca.bootrca.repositories.AddressRepository;
 import rw.ac.rca.bootrca.repositories.ParentRepository;
 import rw.ac.rca.bootrca.repositories.StudentRepository;
@@ -45,7 +44,7 @@ public class ParentController extends BaseController {
         List<PhoneNumber> validPhoneNumbers = processPhoneNumbers(parentDTO.getPhoneNumbers());
         Date dateOfBirth = processStringDate(parentDTO.getDateOfBirth());
         if (optionalAddress.isPresent()) {
-            Parent newParent = new Parent(parentDTO.getFirstName(), parentDTO.getLastName(), parentDTO.getGender(), parentDTO.getEmail(), dateOfBirth, optionalAddress.get(), validPhoneNumbers);
+            Parent newParent = new Parent(parentDTO.getFirstName(), parentDTO.getLastName(), parentDTO.getGender().toUpperCase(), parentDTO.getEmail(), dateOfBirth, optionalAddress.get(), validPhoneNumbers);
             return ResponseEntity.ok(new CustomResponse<>(ok, parentRepository.save(newParent)));
         }else {
             return ResponseEntity.ok(new CustomResponse<>(fail));
@@ -67,7 +66,7 @@ public class ParentController extends BaseController {
 
         existingParent.setFirstName(parentDTO.getFirstName());
         existingParent.setLastName(parentDTO.getLastName());
-        existingParent.setGender(parentDTO.getGender());
+        existingParent.setGender(parentDTO.getGender().toUpperCase());
         existingParent.setEmail(parentDTO.getEmail());
 
         List<PhoneNumber> validPhoneNumbers = processPhoneNumbers(parentDTO.getPhoneNumbers());
@@ -81,16 +80,7 @@ public class ParentController extends BaseController {
         return ResponseEntity.ok(new CustomResponse<>(ok, updatedParent));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<CustomResponse<Parent>> delete(@PathVariable("id") Long id){
-        Optional<Parent> optionalParent = parentRepository.findById(id);
-        if (optionalParent.isPresent()){
-            parentRepository.delete(optionalParent.get());
-            return ResponseEntity.ok(new CustomResponse<>(ok));
-        }else {
-            return ResponseEntity.ok(new CustomResponse<>(fail));
-        }
-    }
+
 
 
 }

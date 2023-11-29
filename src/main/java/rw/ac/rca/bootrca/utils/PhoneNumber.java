@@ -1,4 +1,4 @@
-package rw.ac.rca.bootrca.models;
+package rw.ac.rca.bootrca.utils;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

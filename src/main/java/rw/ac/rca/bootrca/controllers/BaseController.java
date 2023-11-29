@@ -1,6 +1,6 @@
 package rw.ac.rca.bootrca.controllers;
 
-import rw.ac.rca.bootrca.models.PhoneNumber;
+import rw.ac.rca.bootrca.utils.PhoneNumber;
 import rw.ac.rca.bootrca.models.Student;
 import rw.ac.rca.bootrca.repositories.StudentRepository;
 import rw.ac.rca.bootrca.utils.CourseDuration;

@@ -88,16 +88,6 @@ public class MarksController {
         }
     }
 
-    @DeleteMapping("/delete/{marks_id}")
-    public ResponseEntity<CustomResponse<Marks>> delete(@PathVariable("marks_id") Long marks_id){
-        Optional<Marks> optionalMarks = marksRepository.findById(marks_id);
-        if (optionalMarks.isPresent()){
-            marksRepository.delete(optionalMarks.get());
-            return ResponseEntity.ok(new CustomResponse<>(ok));
-        }else {
-            return ResponseEntity.ok(new CustomResponse<>(fail));
-        }
-    }
 
 }
 

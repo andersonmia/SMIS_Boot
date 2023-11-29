@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import rw.ac.rca.bootrca.DTO.InstructorDTO;
 import rw.ac.rca.bootrca.models.Address;
 import rw.ac.rca.bootrca.models.Instructor;
-import rw.ac.rca.bootrca.models.PhoneNumber;
+import rw.ac.rca.bootrca.utils.PhoneNumber;
 import rw.ac.rca.bootrca.repositories.AddressRepository;
 import rw.ac.rca.bootrca.repositories.CourseRepository;
 import rw.ac.rca.bootrca.repositories.InstructorRepository;
@@ -52,7 +52,7 @@ public class InstructorController extends BaseController{
         if (optionalAddress.isEmpty())
             return ResponseEntity.ok(new CustomResponse<>("Enter Valid Address"));
 
-        Instructor instructor = new Instructor(instructorDTO.getFirstName(), instructorDTO.getLastName(), instructorDTO.getGender(),instructorDTO.getEmail(), dateOfBirth, optionalAddress.get(), validPhoneNumbers);
+        Instructor instructor = new Instructor(instructorDTO.getFirstName(), instructorDTO.getLastName(), instructorDTO.getGender().toUpperCase(),instructorDTO.getEmail(), dateOfBirth, optionalAddress.get(), validPhoneNumbers);
         return ResponseEntity.ok(new CustomResponse<>(ok, instructorRepository.save(instructor)));
     }
 
@@ -69,7 +69,7 @@ public class InstructorController extends BaseController{
             existingInstructor.setEmail(instructorDTO.getEmail());
             existingInstructor.setPhoneNumbers(validPhoneNumbers);
             optionalAddress.ifPresent(existingInstructor::setAddress);
-            existingInstructor.setGender(instructorDTO.getGender());
+            existingInstructor.setGender(instructorDTO.getGender().toUpperCase());
             existingInstructor.setFirstName(instructorDTO.getFirstName());
             existingInstructor.setLastName(instructorDTO.getLastName());
 
@@ -79,15 +79,5 @@ public class InstructorController extends BaseController{
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<CustomResponse<Instructor>> delete(@PathVariable("id") Long id){
-        Optional<Instructor> optionalInstructor = instructorRepository.findById(id);
-        if (optionalInstructor.isPresent()){
-            instructorRepository.delete(optionalInstructor.get());
-            return ResponseEntity.ok(new CustomResponse<>(ok));
-        }else {
-            return ResponseEntity.ok(new CustomResponse<>(fail));
-        }
 
-    }
 }

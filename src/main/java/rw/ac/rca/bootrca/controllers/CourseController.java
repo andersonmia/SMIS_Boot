@@ -76,13 +76,5 @@ public class CourseController extends BaseController{
 
     }
 
-    @DeleteMapping("/delete/{courseCode}")
-    public ResponseEntity<CustomResponse<Course>> deleteByCourseCode(@PathVariable("courseCode") String courseCode){
-        Optional<Course> optionalCourse = Optional.ofNullable(courseRepository.searchCourseByCourseCode(courseCode));
-        if (optionalCourse.isEmpty())
-            return ResponseEntity.ok(new CustomResponse<>(fail));
-        courseRepository.delete(optionalCourse.get());
-        return ResponseEntity.ok(new CustomResponse<>(ok));
-    }
 
 }

@@ -52,7 +52,7 @@ public class StudentController extends BaseController{
         StudentStatus studentStatus = processStudentStatus(studentDTO.getStudentStatus());
 
         if (optionalParent.isPresent() & optionalAddress.isPresent()){
-            Student newStudent = new Student(studentDTO.getFirstName(), studentDTO.getLastName(), studentDTO.getGender(), studentDTO.getEmail(), dateOfBirth, optionalAddress.get(), studentDTO.getStudentCode(), optionalParent.get(),studentStatus);
+            Student newStudent = new Student(studentDTO.getFirstName(), studentDTO.getLastName(), studentDTO.getGender().toUpperCase(), studentDTO.getEmail(), dateOfBirth, optionalAddress.get(), studentDTO.getStudentCode(), optionalParent.get(),studentStatus);
             return ResponseEntity.ok(new CustomResponse<>(ok,studentRepository.save(newStudent)));
         }else {
             return ResponseEntity.ok(new CustomResponse<>("Student Registration Failed"));
@@ -67,7 +67,7 @@ public class StudentController extends BaseController{
             newStudent.setFirstName(student.getFirstName());
             newStudent.setLastName(student.getLastName());
             newStudent.setEmail(student.getEmail());
-            newStudent.setGender(student.getGender());
+            newStudent.setGender(student.getGender().toUpperCase());
             newStudent.setParent(student.getParent());
             newStudent.setDateOfBirth(student.getDateOfBirth());
             newStudent.setAddress(student.getAddress());
@@ -79,14 +79,5 @@ public class StudentController extends BaseController{
             return ResponseEntity.ok(new CustomResponse<>("Student Not Found"));
         }
     }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<CustomResponse<Student>> delete(@PathVariable("id") Long id){
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        if (studentOptional.isPresent()){
-            studentRepository.delete(studentOptional.get());
-            return ResponseEntity.ok(new CustomResponse<>(ok));
-        }else {
-            return ResponseEntity.ok(new CustomResponse<>("Student Not Found"));
-        }
-    }
+
 }

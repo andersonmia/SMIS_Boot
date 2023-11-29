@@ -2,6 +2,7 @@ package rw.ac.rca.bootrca.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rw.ac.rca.bootrca.DTO.UserDTO;
 import rw.ac.rca.bootrca.models.Address;
@@ -25,6 +26,7 @@ public class UserController extends BaseController{
     String fail = "Student Not Found ...";
     final UserRepository userRepository;
     final AddressRepository addressRepository;
+    PasswordEncoder passwordEncoder;
 
     public UserController(StudentRepository studentRepository, UserRepository userRepository, AddressRepository addressRepository) {
         super(studentRepository);
@@ -37,10 +39,11 @@ public class UserController extends BaseController{
 
         UserRole userRole = processUserRole(userDTO.getUserRole());
         Date dateOfBirth = processStringDate(userDTO.getDateOfBirth());
+        String password = passwordEncoder.encode(userDTO.getPassword());
         Optional<Address> optionalAddress = Optional.ofNullable(addressRepository.searchAddressByVillage(userDTO.getVillageName()));
 
         if (optionalAddress.isPresent()) {
-            User newUser = new User(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getGender(), userDTO.getEmail(), dateOfBirth, optionalAddress.get(), userDTO.getUsername(), userDTO.getPassword(), userRole);
+            User newUser = new User(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getGender().toUpperCase(), userDTO.getEmail(), dateOfBirth, optionalAddress.get(), userDTO.getUsername(), password, userRole);
             return ResponseEntity.ok(new CustomResponse<>(ok, userRepository.save(newUser)));
 
         }else {
@@ -62,7 +65,7 @@ public class UserController extends BaseController{
 
             existingUser.setFirstName(userDTO.getFirstName());
             existingUser.setLastName(userDTO.getLastName());
-            existingUser.setGender(userDTO.getGender());
+            existingUser.setGender(userDTO.getGender().toUpperCase());
             existingUser.setEmail(userDTO.getEmail());
 
             Date dateOfBirth = processStringDate(userDTO.getDateOfBirth());
@@ -81,18 +84,6 @@ public class UserController extends BaseController{
             return ResponseEntity.ok(new CustomResponse<>("User Update Failed"));
         }
     }
-
-
-    @DeleteMapping("/delete/{id}")
-  public ResponseEntity<CustomResponse<User>> delete(@PathVariable("id") Long id){
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()){
-            userRepository.delete(optionalUser.get());
-            return ResponseEntity.ok(new CustomResponse<>(ok));
-        }else {
-            return ResponseEntity.ok(new CustomResponse<>(fail));
-        }
-  }
 
 
 }
