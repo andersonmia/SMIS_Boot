@@ -1,5 +1,6 @@
 package rw.ac.rca.bootrca.models;
 
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
@@ -22,5 +23,6 @@ abstract class Person implements Serializable {
     String email;
     Date dateOfBirth;
     @ManyToOne
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     Address address;
 }

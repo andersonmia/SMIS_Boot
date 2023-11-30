@@ -4,34 +4,24 @@ import jakarta.persistence.*;
 import lombok.*;
 import rw.ac.rca.bootrca.utils.CourseDuration;
 
-import java.util.List;
+import java.util.UUID;
 
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Course {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    @GeneratedValue
+    UUID id;
     String courseName;
     String courseCode;
     Double totalMarks;
+    @Enumerated(EnumType.STRING)
     CourseDuration courseDuration;
-
     @ManyToOne
+    @JoinColumn(name = "instructor_id", referencedColumnName = "id")
     Instructor instructor;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
-    List<Marks> marks;
-
-    public Course(String courseName, String courseCode, Double totalMarks, CourseDuration courseDuration, Instructor instructor) {
-        this.courseName = courseName;
-        this.courseCode = courseCode;
-        this.totalMarks = totalMarks;
-        this.courseDuration = courseDuration;
-        this.instructor = instructor;
-    }
 }
