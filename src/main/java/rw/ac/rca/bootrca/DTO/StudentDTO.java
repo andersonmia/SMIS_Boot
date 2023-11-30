@@ -12,19 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentDTO extends PersonDTO{
-    @NotEmpty
-    @NotNull
     String studentCode;
-
-    @NotEmpty
-    @NotNull
     String parentFirstName;
-
-    @NotEmpty
-    @NotNull
     String parentLastName;
-
-    @NotEmpty
-    @NotNull
     String studentStatus;
 }

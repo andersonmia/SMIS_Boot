@@ -7,20 +7,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class MarksDTO {
 
-    @NotEmpty
     double score;
-
-    @NotEmpty
-    @NotNull
-    String courseCode;
-
-    @NotEmpty
-    @NotNull
-    String studentCode;
+    UUID courseID;
+    UUID studentID;
 }

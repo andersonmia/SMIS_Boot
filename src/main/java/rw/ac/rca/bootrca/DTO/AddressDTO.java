@@ -1,2 +1,14 @@
-package rw.ac.rca.bootrca.DTO;public class AddressDTO {
+package rw.ac.rca.bootrca.DTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class AddressDTO {
+    int villageID;
 }
