@@ -7,8 +7,9 @@ import rw.ac.rca.bootrca.models.Student;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface MarksRepository extends JpaRepository<Marks, Long> {
-    List<Marks> getMarksByStudent(Student student);
-    List<Marks> getMarksByCourseOrderByStudent(Course course);
+public interface MarksRepository extends JpaRepository<Marks, UUID> {
+    List<Marks> getMarksByStudentId(UUID studentID);
+    List<Marks> getMarksByCourseIdOrderByStudent(UUID courseID);
 }

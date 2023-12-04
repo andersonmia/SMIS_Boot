@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import rw.ac.rca.bootrca.utils.CourseDuration;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -24,4 +25,6 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "instructor_id", referencedColumnName = "id")
     Instructor instructor;
+    @ManyToMany
+    List<Student> students;
 }

@@ -8,10 +8,8 @@ import java.util.UUID;
 
 public interface CourseService {
     Course addCourse(CourseDTO courseDTO);
-    Course updateCourse(CourseDTO courseDTO);
-    void deleteCourse(CourseDTO courseDTO);
+    void deleteCourse(UUID courseID);
     List<Course> listAllCourses();
     List<Course> listCoursesByInstructor(UUID instructorID);
-    List<Course> listCoursesByStudent(UUID studentID);
     Course updateCourse(UUID courseID, CourseDTO courseDTO);
 }

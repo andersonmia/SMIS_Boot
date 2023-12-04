@@ -3,6 +3,8 @@ package rw.ac.rca.bootrca.models;
 import jakarta.persistence.*;
 import lombok.*;
 import rw.ac.rca.bootrca.utils.StudentStatus;
+
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,4 +22,6 @@ public class Student extends Person {
     Parent parent;
     @Enumerated(EnumType.STRING)
     StudentStatus studentStatus;
+    @ManyToMany(mappedBy = "students")
+    List<Course> courses;
 }

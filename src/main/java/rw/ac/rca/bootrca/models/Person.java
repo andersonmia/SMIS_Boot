@@ -22,7 +22,4 @@ abstract class Person implements Serializable {
     String gender;
     String email;
     Date dateOfBirth;
-    @ManyToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    Address address;
 }

@@ -11,5 +11,4 @@ abstract public class PersonDTO {
     String gender;
     String email;
     String dateOfBirth;
-    int villageID;
 }
