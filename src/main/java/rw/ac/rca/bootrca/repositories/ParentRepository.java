@@ -6,5 +6,4 @@ import rw.ac.rca.bootrca.models.Parent;
 import java.util.UUID;
 
 public interface ParentRepository extends JpaRepository<Parent, UUID> {
-    Parent searchParentByFirstNameAndLastName(String firstname, String lastname);
 }

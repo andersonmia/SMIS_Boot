@@ -2,8 +2,10 @@ package rw.ac.rca.bootrca.services.impl;
 
 import org.springframework.stereotype.Service;
 import rw.ac.rca.bootrca.DTO.ParentDTO;
+import rw.ac.rca.bootrca.DTO.UserDTO;
 import rw.ac.rca.bootrca.exceptions.ParentNotFoundException;
 import rw.ac.rca.bootrca.models.Parent;
+import rw.ac.rca.bootrca.models.User;
 import rw.ac.rca.bootrca.repositories.ParentRepository;
 import rw.ac.rca.bootrca.services.ParentService;
 import rw.ac.rca.bootrca.utils.PhoneNumberProcessor;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @Service
 public class ParentServiceImpl implements ParentService {
     final ParentRepository parentRepository;
+    UserServiceImpl userService;
 
     public ParentServiceImpl(ParentRepository parentRepository) {
         this.parentRepository = parentRepository;
@@ -29,6 +32,8 @@ public class ParentServiceImpl implements ParentService {
 
     @Override
     public Parent createParent(ParentDTO parentDTO) throws ParseException {
+        User user = userService.addUser(parentDTO.getUserDTO());
+
         PhoneNumberProcessor phoneNumberProcessor = new PhoneNumberProcessor();
         String phoneNumber = phoneNumberProcessor.formatPhoneNumber(parentDTO.getCountryCode(), parentDTO.getPhoneNumber());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -41,6 +46,7 @@ public class ParentServiceImpl implements ParentService {
         newParent.setEmail(parentDTO.getEmail());
         newParent.setDateOfBirth(dateOfBirth);
         newParent.setPhoneNumber(phoneNumber);
+        newParent.setUser(user);
 
         return parentRepository.save(newParent);
     }

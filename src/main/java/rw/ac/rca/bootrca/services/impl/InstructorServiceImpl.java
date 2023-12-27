@@ -3,8 +3,10 @@ package rw.ac.rca.bootrca.services.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import rw.ac.rca.bootrca.DTO.InstructorDTO;
+import rw.ac.rca.bootrca.DTO.UserDTO;
 import rw.ac.rca.bootrca.exceptions.InstructorNotFoundException;
 import rw.ac.rca.bootrca.models.Instructor;
+import rw.ac.rca.bootrca.models.User;
 import rw.ac.rca.bootrca.repositories.InstructorRepository;
 import rw.ac.rca.bootrca.services.InstructorService;
 import rw.ac.rca.bootrca.utils.DateParser;
@@ -20,10 +22,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class InstructorServiceImpl extends DateParser implements InstructorService {
     final InstructorRepository instructorRepository;
+    UserServiceImpl userServiceImpl;
 
 
     @Override
     public Instructor createInstructor(InstructorDTO instructorDTO) throws ParseException {
+        User user = userServiceImpl.addUser(instructorDTO.getUserDTO());
         PhoneNumberProcessor phoneNumberProcessor = new PhoneNumberProcessor();
         String phoneNumber = phoneNumberProcessor.formatPhoneNumber(instructorDTO.getCountryCode(), instructorDTO.getPhoneNumber());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -36,6 +40,7 @@ public class InstructorServiceImpl extends DateParser implements InstructorServi
         instructor.setEmail(instructorDTO.getEmail());
         instructor.setPhoneNumber(phoneNumber);
         instructor.setDateOfBirth(dateOfBirth);
+        instructor.setUser(user);
 
         return instructorRepository.save(instructor);
     }

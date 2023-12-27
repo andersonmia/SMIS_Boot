@@ -16,4 +16,6 @@ public class Parent extends Person{
     @GeneratedValue
     UUID id;
     String phoneNumber;
+    @OneToOne(mappedBy = "parent", cascade = CascadeType.ALL)
+    User user;
 }

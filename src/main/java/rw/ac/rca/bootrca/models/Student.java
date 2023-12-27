@@ -24,4 +24,6 @@ public class Student extends Person {
     StudentStatus studentStatus;
     @ManyToMany(mappedBy = "students")
     List<Course> courses;
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    User user;
 }

@@ -6,6 +6,4 @@ import rw.ac.rca.bootrca.models.User;
 import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
-    User findUserByUsername(String username);
-
 }

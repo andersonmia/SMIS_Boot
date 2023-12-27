@@ -2,12 +2,13 @@ package rw.ac.rca.bootrca.services.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import rw.ac.rca.bootrca.DTO.PersonDTO;
 import rw.ac.rca.bootrca.DTO.StudentDTO;
-import rw.ac.rca.bootrca.exceptions.CourseNotFoundException;
+import rw.ac.rca.bootrca.DTO.UserDTO;
 import rw.ac.rca.bootrca.exceptions.ParentNotFoundException;
-import rw.ac.rca.bootrca.models.Course;
 import rw.ac.rca.bootrca.models.Parent;
 import rw.ac.rca.bootrca.models.Student;
+import rw.ac.rca.bootrca.models.User;
 import rw.ac.rca.bootrca.repositories.CourseRepository;
 import rw.ac.rca.bootrca.repositories.ParentRepository;
 import rw.ac.rca.bootrca.repositories.StudentRepository;
@@ -28,6 +29,8 @@ public class StudentServiceImpl implements StudentService {
     final StudentRepository studentRepository;
     final CourseRepository courseRepository;
     final ParentRepository parentRepository;
+
+    UserServiceImpl userService;
     @Override
     public List<Student> listAllStudents() {
         return studentRepository.findAll();
@@ -35,6 +38,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student addStudent(StudentDTO studentDTO) throws ParseException {
+        User user = userService.addUser(studentDTO.getUserDTO());
 
         DateParser dateParser = new DateParser();
         Date dateOfBirth = dateParser.convertStringToDate(studentDTO.getDateOfBirth());
@@ -53,6 +57,7 @@ public class StudentServiceImpl implements StudentService {
         student.setEmail(studentDTO.getEmail());
         student.setDateOfBirth(dateOfBirth);
         student.setParent(parent);
+        student.setUser(user);
 
         return studentRepository.save(student);
     }

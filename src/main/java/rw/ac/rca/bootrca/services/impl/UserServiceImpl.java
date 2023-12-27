@@ -14,16 +14,16 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
+    StudentServiceImpl studentService;
 
     @Override
     public User addUser(UserDTO userDTO) {
         User newUser = new User();
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
-        newUser.setEmail(userDTO.getEmail());
+
         newUser.setUsername(userDTO.getUsername());
         newUser.setPassword(userDTO.getPassword());
-        newUser.setUserRole(UserRole.valueOf(userDTO.getUserRole()));
+        newUser.setRole(UserRole.valueOf(userDTO.getUserRole()));
+        System.out.println(newUser);
         return userRepository.save(newUser);
     }
 
@@ -31,17 +31,12 @@ public class UserServiceImpl implements UserService {
     public User updateUser(UUID userID, UserDTO userDTO) {
         User existingUser = userRepository.findById(userID)
                 .orElseThrow(() -> new UserNotFoundException("User " +userID+ " Not Found"));
-        if (userDTO.getFirstName() != null) {
-            existingUser.setFirstName(userDTO.getFirstName());
-        }
-        if (userDTO.getLastName() != null) {
-            existingUser.setLastName(userDTO.getLastName());
-        }
-        if (userDTO.getEmail() != null) {
-            existingUser.setEmail(userDTO.getEmail());
-        }
+
         if (userDTO.getUsername() != null) {
             existingUser.setUsername(userDTO.getUsername());
+        }
+        if (userDTO.getPassword() != null) {
+            existingUser.setPassword(userDTO.getPassword());
         }
         return userRepository.save(existingUser);    }
 

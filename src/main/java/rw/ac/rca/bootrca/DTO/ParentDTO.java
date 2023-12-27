@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParentDTO extends PersonDTO{
+    UserDTO userDTO;
     int countryCode;
     int phoneNumber;
 }

@@ -1,6 +1,7 @@
 package rw.ac.rca.bootrca.services;
 
 import rw.ac.rca.bootrca.DTO.InstructorDTO;
+import rw.ac.rca.bootrca.DTO.UserDTO;
 import rw.ac.rca.bootrca.models.Instructor;
 
 import java.text.ParseException;

@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InstructorDTO extends PersonDTO{
+    UserDTO userDTO;
     int countryCode;
     int phoneNumber;
 }

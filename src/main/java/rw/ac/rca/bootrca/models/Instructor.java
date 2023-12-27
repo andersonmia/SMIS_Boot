@@ -15,4 +15,6 @@ public class Instructor extends Person{
     @GeneratedValue
     UUID id;
     String phoneNumber;
+    @OneToOne(mappedBy = "instructor", cascade = CascadeType.ALL)
+    User user;
 }

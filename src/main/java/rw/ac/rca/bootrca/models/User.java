@@ -11,12 +11,25 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends Person{
+public class User{
     @Id
     @GeneratedValue
     UUID id;
     String username;
     String password;
     @Enumerated(EnumType.STRING)
-    UserRole userRole;
+    UserRole role;
+
+    @OneToOne
+    @JoinColumn(name = "instructor_id")
+    Instructor instructor;
+
+    @OneToOne
+    @JoinColumn(name = "parent_id")
+    Parent parent;
+
+    @OneToOne
+    @JoinColumn(name = "student_id")
+    Student student;
+
 }

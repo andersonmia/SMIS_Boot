@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentDTO extends PersonDTO{
+    UserDTO userDTO;
     String studentCode;
     UUID parentID;
     String studentStatus;
